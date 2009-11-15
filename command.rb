@@ -19,6 +19,10 @@ class Command
   end
 
   def validate_args(args)
+    if args.size > @args.size
+      raise ArgumentError.new("#{@command} only takes #{@args.size} parameter#{"s" if @args.size != 1}.")
+    end
+
     @args.each_with_index do |arg, i|
       if args[i].nil? || args[i].empty?
         raise ArgumentError.new("#{@args[i][:name]} is missing.")
