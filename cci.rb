@@ -1,6 +1,8 @@
 require "command.rb"
 require "parser.rb"
 
+require "commands/memcache"
+
 def quit
   puts
   exit
@@ -10,9 +12,7 @@ Signal.trap("SIGINT") { quit }
 
 parser = Parser.new
 
-parser.register_command(Command.new("set", [{:name => "ID", :regex => /^\d+$/}, {:name => "Message", :regex => //}]))
-parser.register_command(Command.new("get", [{:name => "ID", :regex => /^\d+$/}, {:name => "Message", :regex => //}]))
-
+Commands::MemCache.load(parser)
 
 loop do
   print ":)"
