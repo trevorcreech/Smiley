@@ -7,8 +7,12 @@ class Parser
   end
 
   def internal_commands
-    register_command(Command.new("commands", nil, proc { puts @commands.map{|c| c.command}.join("\n") } ))
+    register_command(Command.new("commands", nil, proc { commands } ))
     register_command(Command.new("help", [{:name => "Command"}], proc {|args| help(args[0])} ))
+  end
+  
+  def commands
+    puts @commands.map{|c| c.command}.join("\n")
   end
 
   def help(command_name)
