@@ -39,9 +39,6 @@ class Parser
   end
 
   def find_command(name)
-    @commands.each do |c|
-      return c if c.command == name
-    end
-    return nil
+    @commands.find {|c| c.command == name}
   end
 end
