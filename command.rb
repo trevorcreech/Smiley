@@ -33,6 +33,6 @@ class Command
   end
 
   def example
-    "#{@command} #{@args.map{|a| a[:name]}.join(" ")}"
+    "#{@command} #{@args.map{|a| a[:name].upcase.gsub(/\s+/, "_")}.join(" ")}"
   end
 end

@@ -13,7 +13,11 @@ class Parser
 
   def help(command_name)
     command = find_command(command_name)
-    puts command.example if command
+    if command
+      puts command.example
+    else
+      puts "#{command_name} is not a valid command."
+    end
   end
 
   def register_command(command)
