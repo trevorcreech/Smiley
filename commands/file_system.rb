@@ -12,12 +12,15 @@ module Commands
                                           [],
                                           proc{|args| self.ls}))
       parser.register_command(Command.new("cd",
-                                          [{:newdir => "New Directory"}],
+                                          [{:name => "New Directory"}],
                                           proc{|args| self.cd(args[0])}))
+      parser.register_command(Command.new("cat",
+                                          [{:name => "File"}],
+                                          proc{|args| self.cat(args[0])}))
+                                        
     end
     
     def self.ls
-      p "Switching to #{@current_dir}"
       dirs, files = Dir.open(@current_dir).partition {|f| File.directory?(f) }
       
       dirs.each do |dir|
@@ -43,6 +46,14 @@ module Commands
       end
     end
     
+    def self.cat(file)
+      if(self.valid_file?(file))
+        File.open(file).each_line {|l| puts l }
+      else
+        puts "Invalid File"
+      end
+    end
+    
     private
     
     def self.dirify(dir)
@@ -52,6 +63,10 @@ module Commands
     
     def self.valid_dir?(dir)
       File.directory?(dir)
+    end
+    
+    def self.valid_file?(file)
+      File.file?(file)
     end
   end
 end

@@ -27,7 +27,11 @@ class Parser
 
     command = find_command(command_name)
     begin
-      command.execute(args) if command
+      if command
+        command.execute(args)
+      else
+        puts "Invalid Command"
+      end
     rescue ArgumentError => e
       puts e.message
       puts "Example: #{command.example}"

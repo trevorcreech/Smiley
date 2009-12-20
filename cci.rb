@@ -1,9 +1,12 @@
+require "rubygems"
 require "command.rb"
 require "parser.rb"
-
-require "commands/memcache"
+require "activesupport"
 
 class CCI
+  
+  BUNDLES = %w(MemCache FileSystem)
+  
   def initialize
     @parser = Parser.new
 
@@ -19,7 +22,7 @@ class CCI
   Signal.trap("SIGINT") { quit }
 
   def run
-    Commands::MemCache.load(@parser)
+    BUNDLES.each {|b| load_bundle(b) }
 
     loop do
       print "#{@prompt} "
@@ -32,7 +35,15 @@ class CCI
   private
 
   def internal_commands
-    @parser.register_command(Command.new("set_prompt", [{:name => "Prompt"}], proc {|args| @prompt = args.first } ))
+    @parser.register_command(Command.new("set_prompt",
+                                         [{:name => "Prompt"}],
+                                         proc {|args| @prompt = args.first } ))
+  end
+  
+  def load_bundle(bundle)
+    bundle = "Commands::#{bundle}"
+    require bundle.underscore
+    bundle.constantize.load(@parser)
   end
 end
 
