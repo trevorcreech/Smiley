@@ -36,7 +36,7 @@ class CCI
 
   def internal_commands
     @parser.register_command(Command.new("set_prompt",
-                                         [{:name => "Prompt"}],
+                                         [{:name => "Prompt", :default => ":)"}],
                                          proc {|args| @prompt = args.first } ))
   end
   

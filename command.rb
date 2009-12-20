@@ -25,6 +25,12 @@ class Command
 
     @args.each_with_index do |arg, i|
       if args[i].nil? || args[i].empty?
+        # Handle optional args (only valid if last ones left off)
+        if @args[i..-1].all? {|arg| arg.has_key?(:default) }
+          args[i..-1] = @args[i..-1].map{|a| a[:default]}
+          break
+        end
+        
         raise ArgumentError.new("#{@args[i][:name]} is missing.")
       elsif arg[:regex] && args[i] !~ arg[:regex]
         raise ArgumentError.new("#{@args[i][:name]} is invalid.")

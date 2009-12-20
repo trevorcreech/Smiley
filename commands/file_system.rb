@@ -7,16 +7,18 @@ module Commands
     @current_dir = "./"
     
     def self.load(parser)
+      #TODO: Go to home dir instead of .
+      @home_dir = Dir.pwd
 
       parser.register_command(Command.new("ls",
                                           [],
                                           proc{|args| self.ls}))
       parser.register_command(Command.new("cd",
-                                          [{:name => "New Directory"}],
-                                          proc{|args| self.cd(args[0])}))
+                                          [{:name => "New Directory", :default => @home_dir}],
+                                          proc{|args| self.cd(args.first)}))
       parser.register_command(Command.new("cat",
                                           [{:name => "File"}],
-                                          proc{|args| self.cat(args[0])}))
+                                          proc{|args| self.cat(args.first)}))
                                         
     end
     
