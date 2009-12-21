@@ -4,7 +4,7 @@ require "memcache"
 module Commands
   class FileSystem
     
-    @current_dir = "./"
+    @current_dir = Dir.pwd + "/"
     
     def self.load(parser)
       #TODO: Go to home dir instead of .
@@ -60,6 +60,14 @@ module Commands
     
     def self.dirify(dir)
       dir += "/" unless dir[-1,1] == "/"
+      
+      # Simplify ../'s
+      old_dir = nil
+      until old_dir == dir
+        old_dir = dir
+        dir = dir.sub(/\/[^\/]*\/\.\.\//,"/")
+      end
+      
       dir
     end
     
