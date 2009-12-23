@@ -7,8 +7,7 @@ module Commands
     @current_dir = Dir.pwd + "/"
     
     def self.load(parser)
-      #TODO: Go to home dir instead of .
-      @home_dir = Dir.pwd
+      @home_dir = "~"
 
       parser.register_command(Command.new("ls",
                                           [],
@@ -37,10 +36,8 @@ module Commands
     end
     
     def self.cd(newdir)
-      unless newdir[0,1] == "/"
-        newdir = @current_dir + newdir
-      end
-      newdir = dirify(newdir)
+      newdir = File.expand_path(newdir, @current_dir)
+      
       if valid_dir?(newdir)
         @current_dir = newdir
       else
@@ -57,20 +54,7 @@ module Commands
     end
     
     private
-    
-    def self.dirify(dir)
-      dir += "/" unless dir[-1,1] == "/"
-      
-      # Simplify ../'s
-      old_dir = nil
-      until old_dir == dir
-        old_dir = dir
-        dir = dir.sub(/\/[^\/]*\/\.\.\//,"/")
-      end
-      
-      dir
-    end
-    
+        
     def self.valid_dir?(dir)
       File.directory?(dir)
     end
